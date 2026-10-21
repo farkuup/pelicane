@@ -213,3 +213,8 @@ body.feed main { padding:0; max-width:none; }
   .like { bottom:calc(120px + env(safe-area-inset-bottom)); }
   .slide .shade { background:linear-gradient(180deg,#0006 0%,#0000 18%,#0000 40%,#000d 80%,#000 100%); }
 }
+
+/* Galerie d'images du film (fondu enchaîné au-dessus de l'affiche) */
+.slide .bg.gal { opacity:0; transition:opacity 1s ease; }
+.slide .bg.gal.on { opacity:1; }
+.slide .bg.gal:not([src]) { display:none; }

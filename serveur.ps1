@@ -21,6 +21,7 @@ while ($listener.IsListening) {
       $ext = [IO.Path]::GetExtension($full).ToLower()
       $ctx.Response.ContentType = $(if ($mime.ContainsKey($ext)) { $mime[$ext] } else { "application/octet-stream" })
       $bytes = [IO.File]::ReadAllBytes($full)
+      $ctx.Response.Headers.Add("Cache-Control", "no-store")
       $ctx.Response.ContentLength64 = $bytes.Length
       $ctx.Response.OutputStream.Write($bytes, 0, $bytes.Length)
     } else {

@@ -396,6 +396,7 @@ function slide(f) {
   const names = f.genreIds.map((i) => genreMap[i]).filter(Boolean).slice(0, 3).join(" · ");
   return `<section class="slide" data-id="${f.tmdbId}">
     ${f.poster ? `<img class="bg" alt="" loading="lazy" src="${IMG}w780${f.poster}">` : ""}
+    <img class="bg gal" alt="" aria-hidden="true"><img class="bg gal" alt="" aria-hidden="true">
     <div class="shade"></div>
     <div class="heartpop" aria-hidden="true">${HEART}</div>
     <button class="like${liked ? " on" : ""}" aria-label="Ajouter à ma liste">${HEART}<small>Ma liste</small></button>
@@ -435,10 +436,42 @@ async function feedPage() {
   });
   feed.addEventListener("dblclick", (e) => { if (!e.target.closest("a,button")) like(e.target.closest(".slide"), true); });
 
+  // Galerie : si on reste plus de 2,5 s sur un film, des images du film défilent en fondu (toutes les 3 s).
+  const gallery = new Map(), stops = new Set();
+  const stopGallery = (sl) => {
+    clearTimeout(sl._t); clearInterval(sl._iv);
+    sl.querySelectorAll(".gal").forEach((g) => g.classList.remove("on"));
+  };
+  const startGallery = (sl) => {
+    stopGallery(sl);
+    sl._t = setTimeout(async () => {
+      const id = +sl.dataset.id;
+      if (!gallery.has(id)) {
+        try {
+          const r = await tmdb(`/movie/${id}/images`, { include_image_language: "fr,en,null" });
+          const list = (r.backdrops.length ? r.backdrops : r.posters).slice(0, 8);
+          gallery.set(id, list.map((x) => `${IMG}w780${x.file_path}`));
+        } catch { gallery.set(id, []); }
+      }
+      const urls = gallery.get(id);
+      if (!urls.length) return;
+      const layers = sl.querySelectorAll(".gal"); let i = 0, side = 0;
+      const next = () => {
+        const img = layers[side], other = layers[1 - side], url = urls[i % urls.length]; i++; side = 1 - side;
+        img.onload = () => { img.classList.add("on"); other.classList.remove("on"); };
+        img.src = url;
+      };
+      next(); sl._iv = setInterval(next, 3000);
+      stops.add(sl);
+    }, 2500);
+  };
+  addEventListener("hashchange", () => stops.forEach(stopGallery), { once: true });
+
   // Bande-annonce chargée quand le film est à l'écran (une requête par film).
   const done = new Set();
   const io = new IntersectionObserver((es) => es.forEach(async (e) => {
-    if (!e.isIntersecting) return;
+    if (!e.isIntersecting) { stopGallery(e.target); return; }
+    startGallery(e.target);
     const sl = e.target, id = +sl.dataset.id;
     if (done.has(id)) return; done.add(id);
     try {
