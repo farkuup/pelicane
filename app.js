@@ -414,7 +414,7 @@ function slide(f) {
 async function feedPage() {
   app.innerHTML = "<p>Chargement…</p>";
   const films = await loadNowPlaying();
-  app.innerHTML = `<div class="feed" id="feed">${films.map(slide).join("")}</div><div class="feed-hint" id="feed-hint">Double-tape pour ajouter à ma liste ♥</div>`;
+  app.innerHTML = `<div class="feed" id="feed">${films.map(slide).join("")}</div>`;
   const feed = document.getElementById("feed"), hint = document.getElementById("feed-hint");
   setTimeout(() => hint?.classList.add("gone"), 5000);
 
