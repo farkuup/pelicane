@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Pélicane</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Gloock&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <a href="#/" class="brand">Pélicane</a>
+    <nav>
+      <a href="#/feed">Découvrir</a>
+      <a href="#/films">Films</a>
+      <a href="#/ma-liste">Ma liste</a>
+      <a href="#/notifications" class="bell" aria-label="Notifications" title="Notifications"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 22a2.4 2.4 0 0 0 2.4-2.4h-4.8A2.4 2.4 0 0 0 12 22zm7-6.4V11a7 7 0 0 0-5.5-6.8V3.5a1.5 1.5 0 0 0-3 0v.7A7 7 0 0 0 5 11v4.6l-2 2v1h18v-1z" fill="currentColor"/></svg><span id="bell-n" hidden></span></a>
+    </nav>
+  </header>
+  <main id="app"></main>
+  <footer>Séances indépendantes : SCARE / Data Ciné Indés (Licence Ouverte 2.0). Ce produit utilise l'API TMDB mais n'est ni approuvé ni certifié par TMDB.</footer>
+  <script src="config.js"></script>
+  <script src="config.local.js"></script>
+  <script src="letterboxd.js"></script>
+  <script src="store.js"></script>
+  <script src="seed.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
